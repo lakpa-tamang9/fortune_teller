@@ -7,10 +7,9 @@ const cors = require('cors');
 const app = express();
 const port = 3000;
 
-
 const configuration = new Configuration({
-    organization: "YOUR_ORG_ID",
-    apiKey: "YOUR_API_KEY",
+    organization: "org-Mv89p3olbOhYA3KpocuAaDaa",
+    apiKey: "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",
 });
 const openai = new OpenAIApi(configuration);
 
@@ -24,8 +23,10 @@ app.use(cors());
 // });
 
 app.post('/', async (req, res) => {
-    const { message } =req.body;
-    const response = await openai.createCompletion({
+    const { message, language } =req.body;
+
+    if (language == 'english'){
+      const response = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: `Pretend you are a fortune teller. 
         Provide the good fortune with future tense sentences \ 
@@ -34,10 +35,19 @@ app.post('/', async (req, res) => {
         max_tokens: 100,
         temperature: 0,
       });
-      // console.log(response.data)
-      if(response.data.choices[0].text){
-        res.json({message: response.data.choices[0].text})
-      }
+      res.json({message: response.data.choices[0].text})
+    } else if (language == 'korean'){
+      const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: `Pretend you are a fortune teller. 
+        Provide the good fortune with future tense sentences \ 
+        using the following keywords in korean language: 부자, 건강, 결혼, 아기, 사업. 
+        Also, use the following personal information to make the sentences: ${message}`,
+        max_tokens: 200,
+        temperature: 0,
+      });
+      res.json({message: response.data.choices[0].text})
+    }        
 });
 
 app.listen(port, () => {
