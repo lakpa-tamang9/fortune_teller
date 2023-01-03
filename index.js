@@ -9,8 +9,8 @@ const port = 3000;
 
 
 const configuration = new Configuration({
-    organization: "org-Mv89p3olbOhYA3KpocuAaDaa",
-    apiKey: "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",
+    organization: "YOUR_ORG_ID",
+    apiKey: "YOUR_API_KEY",
 });
 const openai = new OpenAIApi(configuration);
 
